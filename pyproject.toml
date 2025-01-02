@@ -1,0 +1,109 @@
+[tool.poetry]
+name = "retrie"
+version = "0.1.0"
+description = "Fast lookup for string patterns using Trie, Radix & Aho-Corasick algorithms"
+authors = ["J.Khakpour <jfr.khakpour@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+# homepage = ""
+repository = "https://github.com/JKhakpour/retrie"
+# documentation = ""
+# keywords = [""]
+include = ["LICENSE"]
+
+
+classifiers = [
+    # https://pypi.org/classifiers/
+    # "Development Status :: 1 - Planning",
+    # "Development Status :: 2 - Pre-Alpha",
+    # "Development Status :: 3 - Alpha",
+    "Development Status :: 4 - Beta",
+    # "Development Status :: 5 - Production/Stable",
+    # "Development Status :: 6 - Mature",
+    # "Development Status :: 7 - Inactive",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Natural Language :: English",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Topic :: Software Development :: Libraries",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Utilities"
+]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+rich = "^13.9.2"
+sortedcontainers = "^2.4.0"
+
+[tool.poetry.group.dev]
+optional = true
+
+[tool.poetry.group.dev.dependencies]
+mypy = "^1.12.1"
+pytest = "^8.3.3"
+ruff = "^0.7.0"
+tox = "^4.23.0"
+
+[tool.ruff.lint]
+select = [
+    "F",
+    "E",
+    "W",
+    "C90",
+    "I",
+    "N",
+    "D",
+    "UP",
+    "YTT",
+    "ANN",
+    "B",
+    "A",
+    "COM",
+    "C4",
+    "DTZ",
+    "ISC",
+    "ICN",
+    "INP",
+    "PIE",
+    "PT",
+    "RET",
+    "SIM",
+    "TID",
+    "ARG",
+    "PLC",
+    "PLE",
+    "PLR",
+    "PLW",
+    "RUF",
+]
+ignore = [
+    "D105",
+    "D107",
+    "D203",
+    "D212",
+    "UP006",
+    "UP007",
+    "ANN101",
+    "ANN102",
+    "D400",
+    "D406",
+    "D407",
+    "PLC1901",
+    "UP035",
+    "PT003",
+    "ANN401",
+]
+unfixable = ["F401", "F841"]
+
+[tool.ruff.lint.per-file-ignores]
+"test_*.py" = ["ANN001", "ANN002", "ANN003", "D101", "D103", "D205", "D415", "PLR2004"]
+"*_test.py" = ["ANN001", "ANN002", "ANN003", "D101", "D103", "D205", "D415", "PLR2004"]
+
+[tool.ruff.lint.pyupgrade]
+keep-runtime-typing = true
+
+[build-system]
+requires = ["poetry-core>=1.8.0"]
+build-backend = "poetry.core.masonry.api"
