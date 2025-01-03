@@ -1,5 +1,5 @@
 """Tests specific for Trie class which does not apply to it's subclasses."""
-from retrie.tests.test_utils import default_value
+from tests.test_utils import default_value
 from retrie.trie import Trie, TupleTrie
 
 

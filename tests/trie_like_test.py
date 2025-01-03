@@ -6,7 +6,7 @@ These tests check general behavior of Trie class and its subclasses.
 from types import GeneratorType
 
 from retrie import Trie, TupleTrie
-from retrie.tests.test_utils import (
+from tests.test_utils import (
     default_value,
     print_nested,
 )

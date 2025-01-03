@@ -5,7 +5,7 @@ These tests does not apply for parent classes (like Trie).
 Such tests are included in trie-like and dict-like tests.
 """
 from retrie.radix import Radix
-from retrie.tests.test_utils import default_value
+from tests.test_utils import default_value
 
 
 def test_radix_iternal_struct() -> None:

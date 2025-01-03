@@ -7,7 +7,7 @@ from collections.abc import KeysView, ValuesView
 
 import pytest
 
-from retrie.tests.test_utils import (
+from tests.test_utils import (
     data_in_test,
     default_value,
     func_simple_trie,

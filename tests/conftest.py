@@ -5,7 +5,7 @@ import pytest
 
 from retrie.ahocorasick import ACTrie
 from retrie.radix import Radix
-from retrie.tests.test_utils import (
+from tests.test_utils import (
     data_in_test,
     default_value,
     func_simple_ac_trie,

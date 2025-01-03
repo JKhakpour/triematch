@@ -6,7 +6,7 @@ import pytest
 
 from retrie import ACTrie
 from retrie.ahocorasick import ACTrieStates
-from retrie.tests.test_utils import default_value
+from tests.test_utils import default_value
 
 
 def test_actrie_link_state() -> None:

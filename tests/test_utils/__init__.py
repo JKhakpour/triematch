@@ -3,8 +3,8 @@ from typing import Callable, Iterable
 
 from retrie.ahocorasick import ACTrie
 from retrie.radix import Radix
-from retrie.tests.test_utils import data_in_test
 from retrie.trie import Empty, Trie, TupleTrie
+from tests.test_utils import data_in_test
 
 Etc = data_in_test.Etc
 PAD = "-"
