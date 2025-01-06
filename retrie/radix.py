@@ -1,4 +1,5 @@
-"""A simple implementation of Radix algorithm.
+"""
+A simple implementation of Radix algorithm.
 
 A Radix is a memory efficient version of a Trie data structure.
 All feaures avaible in Trie (StringTrie) are supported by Radix objects.
@@ -6,9 +7,9 @@ All feaures avaible in Trie (StringTrie) are supported by Radix objects.
 from collections import UserDict
 from typing import Any, Iterable, Optional, Tuple
 
-from sortedcontainers import SortedList
+from sortedcollections import SortedList
 
-from retrie.trie import Empty, Node, NotDefined, Trie
+from retrie.trie import Empty, Node, NotDefined, Trie, TrieKey
 from retrie.utils import pairwise
 
 
@@ -55,7 +56,15 @@ class RadixNode(Node):
 
 def argmax(items: Iterable[Any]) -> Any:
     """Find the index of the item with the maximum value."""
-    return max(range(len(items)), key=lambda i: items[i])
+    max_value = -1 ## all values are positive numbers
+    max_index = -1
+    i = 0
+    for item in items:
+        if item > max_value:
+            max_value = item
+            max_index = i
+        i += 1
+    return max_index
 
 
 def common_start(key: str) -> callable:
@@ -147,6 +156,7 @@ class Radix(Trie):
             raise
 
     def __getnode__(self, key: str, only_leafs: bool=True) -> RadixNode:
+        """Retrieve the node associated with a given key in the Radix tree."""
         current_node = self.data
         found_path_len = 0
         while found_path_len < len(key):
@@ -161,7 +171,8 @@ class Radix(Trie):
                 break
 
         # if current_node.value is Empty and only_leafs:
-        if found_path_len < len(key) or current_node.value is Empty or not only_leafs:
+        if found_path_len < len(key) or \
+            (current_node.value is Empty and not only_leafs):
             return self.__missing__(key)
 
         return current_node
@@ -279,3 +290,42 @@ class Radix(Trie):
                     yield curr_index, current_node
             else:
                 break
+
+    def expand(self, path: TrieKey) -> Iterable[tuple[int, Any]]:
+        """
+        Look for patterns which contains `path` key.
+
+        Yields:
+            (int, node) for i as length of matched key and value for matched key
+        """
+        path_len = len(path)
+
+        current_node = self.data
+        found_path_len = 0
+
+        while found_path_len < path_len:
+            key_cand, common_len = self.candidate_key(
+                current_node,
+                path[found_path_len:],
+            )
+            if common_len and common_len == len(key_cand):
+                current_node = current_node[key_cand]
+                found_path_len += len(key_cand)
+            else:
+                break
+
+        if found_path_len < path_len:
+            remaining_key = path[found_path_len:]
+
+            idx = current_node.key_list.bisect_left(remaining_key)
+            curr_nodes = []
+            for key in current_node.key_list[idx:]:
+                if not key.startswith(remaining_key):
+                    break
+                curr_nodes.append((remaining_key, current_node[key]))
+        else:
+            curr_nodes = [(path_len, current_node)]
+
+        for remain_key, node in curr_nodes:
+            node_path = path + remain_key
+            yield from ((node_path + ext, node) for ext, node in node.explore())

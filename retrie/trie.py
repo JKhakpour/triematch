@@ -2,9 +2,9 @@
 Core classes for retrie library.
 
 This module contains the core classes for the retrie library, including the `BaseNode`
-and `Node`, `BaseTrie`, `Trie` and `TupleTrie` classes. A trie is data structure for fast
-lookup of many string patterns in a string. Trie objects in this library have similar
-behavior to dict objects.  This is how it is used:
+and `Node`, `BaseTrie`, `Trie` and `TupleTrie` classes. A trie is data structure for
+fast lookup of many string patterns in a string. Trie objects in this library have
+similar behavior to dict objects.  This is how it is used:
 
 ```python
 from retrie import Trie
@@ -17,10 +17,10 @@ print(trie["hello"]) # Output: Hola
 
 search_sequence = "hello world of Python"
 
-print(list(trie.match(search_sequence))) 
+print(list(trie.match(search_sequence)))
 # Output: [(5, 'Hola'), (11, 'Hola Mundo')]
 
-print(list(trie.search(search_sequence))) 
+print(list(trie.search(search_sequence)))
 # Output: [(0, 5, 'Hola'), (0, 11, 'Hola Mundo'), (6, 11, 'Mundo'), (15, 21, 'Python')]
 ```
 
@@ -85,6 +85,20 @@ class BaseNode(dict):
             )
         )
 
+    def explore(self) -> Iterable[tuple[str, TrieKey]]:
+        """DFS Search for all nodes with a non-empty value."""
+        stack = [('', self)]
+
+        # Perform DFS search for all nodes
+        while stack:
+            current_key, current_node = stack.pop()
+            if current_node.value is not Empty:
+                yield current_key, current_node.value
+            stack.extend(
+                (current_key + key, node)
+                for key, node in
+                reversed(current_node.items())
+            )
 
 class Node(BaseNode):
     """
@@ -416,6 +430,17 @@ class BaseTrie(UserDict):
         """
         for length, node in self._traverse_nodes(path, only_leafs=True):
             yield length, node.value
+
+    def expand(self, path: TrieKey) -> Iterable[tuple[int, Any]]:
+        """
+        Look for patterns which contains `path` key.
+
+        Yields:
+            (int, node) for i as length of matched key and value for matched key
+        """
+        node = self.__getnode__(path, only_leafs=False)
+
+        yield from ((path + ext, node) for ext, node in node.explore())
 
     def search(self, text: TrieKey) -> Iterable[tuple[int, int, Any]]:
         """

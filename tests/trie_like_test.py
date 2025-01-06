@@ -218,3 +218,21 @@ def test_trie_search(strtrie_like_class) -> None:
         (3, 4, default_value("c")),
         (6, 7, default_value("c")),
     ]
+
+def test_trie_expand(strtrie_like_class) -> None:
+
+    keys = [
+        "a",
+        "axxx",
+        "aaaa",
+        "abcg",
+        "abcd",
+        "abcdgh",
+        "abcef",
+        "c",
+    ]
+
+    trie = strtrie_like_class({key: default_value(key) for key in keys})
+    
+    results = list(trie.expand('ab'))
+    print(results)

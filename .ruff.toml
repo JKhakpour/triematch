@@ -1,0 +1,57 @@
+[lint]
+select = [
+    "F",
+    "E",
+    "W",
+    "C90",
+    "I",
+    "N",
+    "D",
+    "UP",
+    "YTT",
+    "ANN",
+    "B",
+    "A",
+    "COM",
+    "C4",
+    "DTZ",
+    "ISC",
+    "ICN",
+    "INP",
+    "PIE",
+    "PT",
+    "RET",
+    "SIM",
+    "TID",
+    "ARG",
+    "PLC",
+    "PLE",
+    "PLR",
+    "PLW",
+    "RUF",
+]
+ignore = [
+    "D105",
+    "D107",
+    "D203",
+    "D212",
+    "UP006",
+    "UP007",
+    "ANN101",
+    "ANN102",
+    "D400",
+    "D406",
+    "D407",
+    "PLC1901",
+    "UP035",
+    "PT003",
+    "ANN401",
+]
+unfixable = ["F401", "F841"]
+
+[lint.per-file-ignores]
+"test_*.py" = ["ANN001", "ANN002", "ANN003", "D101", "D103", "D205", "D415", "PLR2004"]
+"*_test.py" = ["ANN001", "ANN002", "ANN003", "D101", "D103", "D205", "D415", "PLR2004"]
+
+[lint.pyupgrade]
+keep-runtime-typing = true
