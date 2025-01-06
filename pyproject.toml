@@ -11,7 +11,7 @@ dependencies = [
 ]
 readme = "README.md"
 license = {text = "MIT License"}
-keywords = ["retrie", "trie", "prefix tree", "tomatoes", "Lobster Thermidor"]
+keywords = ["retrie", "trie", "prefix tree", "tree", "radix", "aho-corasick", "prefix-tree"]
 
 
 # [build-system]
