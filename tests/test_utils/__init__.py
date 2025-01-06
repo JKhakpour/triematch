@@ -1,7 +1,6 @@
 """Some utility functions for running tests."""
 from typing import Callable, Iterable
 
-from retrie.ahocorasick import ACTrie
 from retrie.radix import Radix
 from retrie.trie import Empty, Trie, TupleTrie
 from tests.test_utils import data_in_test
@@ -21,15 +20,6 @@ def func_simple_trie(
 ) -> Trie:
     """Generate a Trie object with provided keys and values from value_func func."""
     return Trie({key: value_func(key) for key in keys})
-
-
-def func_simple_ac_trie(
-    keys: Iterable=data_in_test.StrData.key_list,
-    value_func: Callable=default_value,
-) -> ACTrie:
-    """Generate a Aho-Corasick Trie object with provided keys."""
-    return ACTrie({key: value_func(key) for key in keys})
-
 
 def func_simple_radix(
     keys: Iterable=data_in_test.StrData.key_list,

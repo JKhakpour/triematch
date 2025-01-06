@@ -42,7 +42,9 @@ print(list(trie.search(search_sequence)))
 # Output: [(0, 2, 'One Two'), (2, 4, 'One Two'), (2, 5, 'One Two Three')]
 ```
 """
+from collections import deque
 from collections import UserDict
+from enum import Enum
 from functools import reduce
 from typing import Any, Iterable, Optional, TypeVar
 
@@ -53,6 +55,13 @@ Empty = object()
 NotDefined = object()
 TrieKey = TypeVar("TrieKey", str, tuple)
 TrieType = TypeVar("TrieType", bound="BaseTrie")
+BaseNodeType = TypeVar("BaseNode", bound="BaseNode")
+
+class TrieStates(Enum):
+    """Enum for Aho-Corasick Trie states."""
+
+    Not_Linked = 1
+    Linked = 2
 
 class BaseNode(dict):
     """
@@ -60,6 +69,7 @@ class BaseNode(dict):
 
     It is a dictlike object used for each nore of trie objets.
     """
+    __slots__ = ("value",)
 
     def __init__(self, value: Any=Empty) -> None:  ## Node TODO not exactly a dict
         self.value = value
@@ -100,16 +110,7 @@ class BaseNode(dict):
                 reversed(current_node.items())
             )
 
-class Node(BaseNode):
-    """
-    Main class for nodes in Trie structure.
-
-    It is a dict-like object used for each node of trie objects.
-    """
-
-    __slots__ = ("value",)
-
-    def copy(self) -> BaseNode:
+    def copy(self) -> BaseNodeType:
         """
         Create a shallow copy of the current Node instance.
 
@@ -119,6 +120,30 @@ class Node(BaseNode):
         inst = self.__class__.__new__(self.__class__)
         inst.update(self)
         return inst
+
+class Node(BaseNode):
+    """
+    Main class for nodes in Trie structure.
+
+    It is a dict-like object used for each node of trie objects.
+    """
+    __slots__ = ("value", "dict_link", "failure_link", "pathlen")
+
+    def __init__(self, value: Any=Empty) -> None:
+        """
+        Construct ACNode instance.
+
+        Args:
+            value (Any, optional): The value associated with this node.
+            Default value is `Empty` object.
+        """
+        self.value = value
+        self.dict_link = None
+        self.failure_link = Empty
+        self.pathlen = None
+
+
+
 
 
 class BaseTrie(UserDict):
@@ -192,7 +217,7 @@ class BaseTrie(UserDict):
             current_node = current_node.setdefault(
                 item,
                 self.__newnode__,
-            )  # TODO for every navigation step __newnode__ is called
+            )
         if current_node.value is Empty:
             self._length += 1
         current_node.value = value
@@ -456,7 +481,131 @@ class BaseTrie(UserDict):
                 yield i, i + length, value
 
 
-class StringTrie(BaseTrie):
+class ACMixin:
+    _state = TrieStates.Not_Linked
+
+    def __setitem__(self, key: TrieKey, value: Any) -> None:
+        """
+        Set a value for a given key in the trie.
+
+        This method tries to have a dict-like behavior.
+
+        Args:
+        key : Some iterable like str or tuple. Each item inside this iterable
+        should be a hashable object.
+        value : Any
+            The value to be stored at the location specified by the key.
+
+        Returns:
+        None
+        """
+        self._check_update_possible()
+        super(ACMixin, self).__setitem__(key, value)
+    
+    def __delitem__(self, key: str) -> None:
+        self._check_update_possible()
+        return super().__delitem__(key)
+
+    def _update_failure_links(self) -> None:
+        root_node = self.data
+        root_node.failure_link = root_node
+        root_node.pathlen = -1
+        stack = deque(
+            (root_node, transition, child) for transition, child in root_node.items()
+        )
+
+        while stack:
+            parent, transition_path, node = stack.pop()
+            ref = parent
+            # while transition not in ref.failure_link and ref is not root_node:
+            #     ref = ref.failure_link
+            tr_path_len = len(transition_path)
+            for i in range(1, tr_path_len):
+                link = self.__getnode_safe__(transition_path[i:])
+
+                if link is not None:
+                    node.failure_link = link
+                    break
+            else:
+                node.failure_link = root_node
+            node.pathlen = ref.pathlen + 1
+
+            for transition, child in node.items():
+                stack.appendleft((node, transition_path + transition, child))
+
+    def _update_dict_links(self) -> None:
+        root_node = self.data
+        stack = deque()
+        stack.appendleft(root_node)
+        while stack:
+            node = stack.pop()
+            ref = node.failure_link
+            while ref.value is Empty and ref is not root_node:
+                ref = ref.failure_link
+
+            if ref is not root_node:
+                node.dict_link = ref
+
+            for child_node in node.values():
+                stack.appendleft(child_node)
+
+    def _check_update_possible(self) -> None:
+        if self._state == TrieStates.Linked:
+            raise AttributeError("Not possible!")
+
+    def link_nodes(self) -> None:
+        """Generate lookup links between nodes and freeze the tree."""
+        self._update_failure_links()
+        self._update_dict_links()
+        self._state = TrieStates.Linked
+
+    def unlink_nodes(self) -> None:
+        """
+        Allow modification on Trie.
+
+        If this method is called, the Trie will search for
+        patterns like a regular Trie. This is trying to implement Aho-Corasick.
+        """
+        self._state = TrieStates.Not_Linked
+
+    def search(self, text: str) -> Iterable[Any]:
+        """
+        Search for the patterns in the given text.
+
+        If link_nodes is called, this methid will use failure and dictionary links
+        to speed up the search process. In other cases it will work as a regular Trie.
+
+        Args:
+            text (str): The text to search for patterns.
+        """
+        if self._state != TrieStates.Linked:
+            yield from super().search(text)
+            return
+        if not text:
+            yield 0, 0, None
+            return
+
+        root_node = current_node = self.data
+
+        for i, letter in enumerate(text):
+            while letter not in current_node and current_node is not root_node:
+                current_node = current_node.failure_link
+
+            current_node = current_node.get(letter, root_node)
+            if current_node.value is not Empty:
+                yield (
+                    i - current_node.pathlen, i + 1, current_node.value,
+                )
+
+            value_node = current_node
+            while True:
+                value_node = value_node.dict_link
+                if value_node is None:
+                    break
+                yield i - value_node.pathlen, i + 1, value_node.value
+
+
+class StringTrie(ACMixin, BaseTrie):
     """
     A Trie data structure for storing string keys.
 
@@ -464,6 +613,12 @@ class StringTrie(BaseTrie):
     It also supports matching keys (which start from 0 in text) and also searching
     for any keys present in the text.
     """
+
+    def __init__(self, _dict: Optional[dict]=None, /, **kwargs: dict[str, Any]) -> None:
+        super().__init__(_dict, **kwargs)
+        self.data.failure_link = (
+            self.data
+        )  # root node is self referencing for failure case
 
     def to_regex(self) -> str:
         """
