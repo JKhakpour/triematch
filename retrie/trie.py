@@ -517,8 +517,6 @@ class ACMixin:
         while stack:
             parent, transition_path, node = stack.pop()
             ref = parent
-            # while transition not in ref.failure_link and ref is not root_node:
-            #     ref = ref.failure_link
             tr_path_len = len(transition_path)
             for i in range(1, tr_path_len):
                 link = self.__getnode_safe__(transition_path[i:])
@@ -677,7 +675,7 @@ class StringTrie(ACMixin, BaseTrie):
         return result
 
 
-class TupleTrie(BaseTrie):
+class TupleTrie(ACMixin, BaseTrie):
     """
     A Trie data structure for storing tuple keys.
 
@@ -710,6 +708,31 @@ class TupleTrie(BaseTrie):
                 stack.append(
                     [ (*path, key), child],
                 )
+    def _update_failure_links(self) -> None:
+        root_node = self.data
+        root_node.failure_link = root_node
+        root_node.pathlen = -1
+        stack = deque(
+            (root_node, (transition,), child) for transition, child in root_node.items()
+        )
+
+        while stack:
+            parent, transition_path, node = stack.pop()
+            ref = parent
+            tr_path_len = len(transition_path)
+            for i in range(1, tr_path_len):
+                link = self.__getnode_safe__(transition_path[i:])
+
+                if link is not None:
+                    node.failure_link = link
+                    break
+            else:
+                node.failure_link = root_node
+            node.pathlen = ref.pathlen + 1
+
+            for transition, child in node.items():
+                stack.appendleft((node, (*transition_path, transition), child))
 
 
-Trie = StringTrie
+class Trie(StringTrie):
+    pass
