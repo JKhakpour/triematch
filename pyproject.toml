@@ -13,11 +13,6 @@ readme = "README.md"
 license = {text = "MIT License"}
 keywords = ["retrie", "trie", "prefix tree", "tree", "radix", "aho-corasick", "prefix-tree"]
 
-
-# [build-system]
-# requires = ["poetry-core>=1.8.0"]
-# build-backend = "poetry.core.masonry.api"
-
 [build-system]
 requires = ["setuptools >= 61.0"]
 build-backend = "setuptools.build_meta"
@@ -30,10 +25,7 @@ description = "Fast lookup for string patterns using Trie, Radix & Aho-Corasick 
 authors = ["Jafar Khakpour"]
 license = "MIT"
 readme = "README.md"
-# homepage = ""
 repository = "https://github.com/JKhakpour/retrie"
-# documentation = ""
-# keywords = [""]
 include = ["LICENSE"]
 
 
