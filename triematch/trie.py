@@ -48,7 +48,7 @@ from enum import Enum
 from functools import reduce
 from typing import Any, Iterable, Optional, TypeVar
 
-from retrie.utils import pairwise
+from triematch.utils import pairwise
 
 # constant values used in data structure
 Empty = object()

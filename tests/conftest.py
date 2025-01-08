@@ -3,7 +3,7 @@ from typing import Iterable
 
 import pytest
 
-from retrie.radix import Radix
+from triematch.radix import Radix
 from tests.test_utils import (
     data_in_test,
     default_value,
@@ -11,7 +11,7 @@ from tests.test_utils import (
     func_simple_trie,
     func_simple_tuple_trie,
 )
-from retrie.trie import Trie
+from triematch.trie import Trie
 
 
 @pytest.fixture()

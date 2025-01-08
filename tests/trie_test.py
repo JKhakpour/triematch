@@ -1,7 +1,7 @@
 """Tests specific for Trie class which does not apply to it's subclasses."""
 from tests.test_utils import default_value
 import pytest
-from retrie.trie import Trie, TupleTrie, TrieStates
+from triematch.trie import Trie, TupleTrie, TrieStates
 
 
 def test_trie_iternal_struct() -> None:

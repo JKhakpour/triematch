@@ -1,8 +1,8 @@
 """Some utility functions for running tests."""
 from typing import Callable, Iterable
 
-from retrie.radix import Radix
-from retrie.trie import Empty, Trie, TupleTrie
+from triematch.radix import Radix
+from triematch.trie import Empty, Trie, TupleTrie
 from tests.test_utils import data_in_test
 
 Etc = data_in_test.Etc

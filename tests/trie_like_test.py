@@ -5,12 +5,12 @@ These tests check general behavior of Trie class and its subclasses.
 """
 from types import GeneratorType
 
-from retrie import Trie, TupleTrie
+from triematch import Trie, TupleTrie
 from tests.test_utils import (
     default_value,
     print_nested,
 )
-from retrie.trie import Node
+from triematch.trie import Node
 
 
 def test_trie_dunder_copy_is_not_shallow(simple_trielike, long_key) -> None:

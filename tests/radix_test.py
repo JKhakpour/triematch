@@ -4,7 +4,7 @@ Tests specific for Radix class.
 These tests does not apply for parent classes (like Trie).
 Such tests are included in trie-like and dict-like tests.
 """
-from retrie.radix import Radix
+from triematch.radix import Radix
 from tests.test_utils import default_value
 
 

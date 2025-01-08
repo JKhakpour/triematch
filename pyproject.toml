@@ -1,5 +1,5 @@
 [project]
-name = "retrie"
+name = "triematch"
 version = "0.1.0"
 description = "Fast lookup for string patterns using Trie, Radix & Aho-Corasick algorithms"
 authors = [
@@ -11,33 +11,10 @@ dependencies = [
 ]
 readme = "README.md"
 license = {text = "MIT License"}
-keywords = ["retrie", "trie", "prefix tree", "tree", "radix", "aho-corasick", "prefix-tree"]
-
-[build-system]
-requires = ["setuptools >= 61.0"]
-build-backend = "setuptools.build_meta"
-
-
-[tool.poetry]
-name = "retrie"
-version = "0.1.0"
-description = "Fast lookup for string patterns using Trie, Radix & Aho-Corasick algorithms"
-authors = ["Jafar Khakpour"]
-license = "MIT"
-readme = "README.md"
-repository = "https://github.com/JKhakpour/retrie"
-include = ["LICENSE"]
-
-
+keywords = ["triematch", "trie", "prefix tree", "tree", "radix", "aho-corasick", "prefix-tree"]
 classifiers = [
     # https://pypi.org/classifiers/
-    # "Development Status :: 1 - Planning",
-    # "Development Status :: 2 - Pre-Alpha",
-    # "Development Status :: 3 - Alpha",
     "Development Status :: 4 - Beta",
-    # "Development Status :: 5 - Production/Stable",
-    # "Development Status :: 6 - Mature",
-    # "Development Status :: 7 - Inactive",
     "Intended Audience :: Developers",
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
@@ -48,19 +25,16 @@ classifiers = [
     "Topic :: Utilities"
 ]
 
-[tool.poetry.dependencies]
-python = "^3.9"
-rich = "^13.9.2"
-sortedcollections = "^2.1.0"
+[build-system]
+requires = ["setuptools >= 61.0"]
+build-backend = "setuptools.build_meta"
 
-[tool.poetry.group.dev]
-optional = true
+[dependency-groups]
+dev = [
+    "pytest>=8.3.4",
+]
 
-[tool.poetry.group.dev.dependencies]
-mypy = "^1.12.1"
-pytest = "^8.3.3"
-ruff = "^0.7.0"
-tox = "^4.23.0"
-build = "^1.2.2.post1"
-
-
+lint = [
+    "mypy>=1.14.1",
+    "ruff>=0.8.6",
+]

@@ -9,8 +9,8 @@ from typing import Any, Iterable, Optional, Tuple
 
 from sortedcollections import SortedList
 
-from retrie.trie import Empty, Node, NotDefined, Trie, TrieKey
-from retrie.utils import pairwise
+from triematch.trie import Empty, Node, NotDefined, Trie, TrieKey
+from triematch.utils import pairwise
 
 
 class RadixNode(Node):
