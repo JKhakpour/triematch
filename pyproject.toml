@@ -1,6 +1,6 @@
 [project]
 name = "triematch"
-version = "0.0.1prerelease"
+version = "0.0.1pre"
 description = "Fast lookup for string patterns using Trie, Radix & Aho-Corasick algorithms"
 authors = [
     {name = "Jafar Khakpour"}
@@ -38,3 +38,6 @@ lint = [
     "mypy>=1.14.1",
     "ruff>=0.8.6",
 ]
+
+[tool.setuptools]
+license-files = []
