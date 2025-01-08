@@ -1,33 +1,32 @@
 """
-Core classes for retrie library.
+Core classes for triematch library.
 
-This module contains the core classes for the retrie library, including the `BaseNode`
+This module contains the core classes for the triematch library, including the `BaseNode`
 and `Node`, `BaseTrie`, `Trie` and `TupleTrie` classes. A trie is data structure for
 fast lookup of many string patterns in a string. Trie objects in this library have
 similar behavior to dict objects.  This is how it is used:
 
 ```python
-from retrie import Trie
+from triematch import Trie
 trie = Trie()
 trie["hello"] = "Hola"
 trie["world"] = "Mundo"
 trie["hello world"] = "Hola Mundo"
-trie["Python"] = "Python"
 print(trie["hello"]) # Output: Hola
 
-search_sequence = "hello world of Python"
+search_sequence = "hello world from Python"
 
 print(list(trie.match(search_sequence)))
 # Output: [(5, 'Hola'), (11, 'Hola Mundo')]
 
 print(list(trie.search(search_sequence)))
-# Output: [(0, 5, 'Hola'), (0, 11, 'Hola Mundo'), (6, 11, 'Mundo'), (15, 21, 'Python')]
+# Output: [(0, 5, 'Hola'), (0, 11, 'Hola Mundo'), (6, 11, 'Mundo')]
 ```
 
 You can also use TupleTrie for other sequence types:
 
 ```python
-from retrie import TupleTrie
+from triematch import TupleTrie
 trie = TupleTrie()
 trie[(1, 2, 3)] = "One Two Three" # with tuple paranthesis
 trie[1, 2] = "One Two" # or without tuple paranthesis
