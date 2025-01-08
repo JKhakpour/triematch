@@ -1,13 +1,16 @@
 """Some utility functions for running tests."""
-from typing import Callable, Iterable
+from collections.abc import Iterable
+from typing import Callable
 
-from triematch.radix import Radix
-from triematch.trie import Empty, Trie, TupleTrie
 from tests.test_utils import data_in_test
+from triematch.radix import Radix
+from triematch.trie import Empty
+from triematch.trie import Trie
+from triematch.trie import TupleTrie
 
 Etc = data_in_test.Etc
-PAD = "-"
-NODE_SIGN = "."
+PAD = '-'
+NODE_SIGN = '.'
 STRIP_CHARS = None
 
 def default_value(key: Iterable) -> Iterable:
@@ -39,7 +42,7 @@ def func_simple_tuple_trie(
 
 def print_nested(data: dict, lvl: int=0) -> str:
     """Print a nested dictionary (Tree) in a human readable indented format."""
-    ret = ""
+    ret = ''
     for key, node in data.items():
         ret += (
             f"{PAD * lvl}{key}{NODE_SIGN if node.value is not Empty else ''}\n"

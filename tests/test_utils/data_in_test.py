@@ -3,23 +3,23 @@
 class StrData:
     """Parameters used in testing string key based Tries are stored in this class."""
 
-    new_key: str = "afgh"  # this key is added to trie later
-    long_key: str = "dabdab"  # a long key
-    missing_key: str = "xyz"  # this key is missing in trie
+    new_key: str = 'afgh'  # this key is added to trie later
+    long_key: str = 'dabdab'  # a long key
+    missing_key: str = 'xyz'  # this key is missing in trie
     # keys of a trie, keep it immutable because it is
     # passed as default param to a function
-    key_list = ("aaa", "abc", "abcd", "abed", long_key)
+    key_list = ('aaa', 'abc', 'abcd', 'abed', long_key)
 
 class TupleStrData:
     """Parameters used in testing (tuple of strings) key based Tries"""
 
-    new_key = ("asd", "abc")  # this key is added to trie later
-    long_key = ("dd", "aaa", "bb", "dd", "ab")  # a long key
-    missing_key = ("x", "yz")  # this key is missing in trie
+    new_key = ('asd', 'abc')  # this key is added to trie later
+    long_key = ('dd', 'aaa', 'bb', 'dd', 'ab')  # a long key
+    missing_key = ('x', 'yz')  # this key is missing in trie
     key_list = (
-        ("aa", "bb", "cc"),
-        ("aa", "bb", "dd"),
-        ("aaa", "bbb", "ccc"),
+        ('aa', 'bb', 'cc'),
+        ('aa', 'bb', 'dd'),
+        ('aaa', 'bbb', 'ccc'),
         long_key,
     )
 

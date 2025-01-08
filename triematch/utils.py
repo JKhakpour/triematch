@@ -1,8 +1,7 @@
 """utility functions used in retire library."""
-
+from collections.abc import Iterable
 from itertools import tee
 from sys import version_info
-from typing import Iterable
 
 if version_info.minor > 9: #noqa PLR2004
     from itertools import pairwise

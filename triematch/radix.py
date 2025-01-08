@@ -5,18 +5,25 @@ A Radix is a memory efficient version of a Trie data structure.
 All feaures avaible in Trie (StringTrie) are supported by Radix objects.
 """
 from collections import UserDict
-from typing import Any, Iterable, Optional, Tuple
+from collections.abc import Iterable
+from typing import Any
+from typing import Optional
+from typing import Tuple
 
 from sortedcollections import SortedList
 
-from triematch.trie import Empty, Node, NotDefined, Trie, TrieKey
+from triematch.trie import Empty
+from triematch.trie import Node
+from triematch.trie import NotDefined
+from triematch.trie import Trie
+from triematch.trie import TrieKey
 from triematch.utils import pairwise
 
 
 class RadixNode(Node):
     """A Node elelemnt used in Radix data structures."""
 
-    __slots__ = (*Node.__slots__, "key_list")
+    __slots__ = (*Node.__slots__, 'key_list')
 
     def __init__(self, value: Any=Empty) -> None:
         """
@@ -179,7 +186,7 @@ class Radix(Trie):
 
     def _regex(self, node: RadixNode, root_node: bool=True) -> str:
         if not len(node) or node.value is not Empty:
-            return ""
+            return ''
 
         inner_patterns = []
         terminal_keys = []
@@ -191,13 +198,13 @@ class Radix(Trie):
         terminal_keys = [
             key
             for key, ch_pattern in childs
-            if ch_pattern == ""
+            if ch_pattern == ''
         ]
 
         inner_patterns = [
             key + ch_pattern
             for key, ch_pattern in childs
-            if ch_pattern != ""
+            if ch_pattern != ''
         ]
         empty_inner_patterns = len(inner_patterns) == 0
 
@@ -206,28 +213,28 @@ class Radix(Trie):
             inner_patterns.append(terminal_keys[0])
         elif len(terminal_keys) > 1:
             if root_node:
-                inner_patterns.append("|".join(sorted(terminal_keys)))
+                inner_patterns.append('|'.join(sorted(terminal_keys)))
             elif max(map(len, terminal_keys)) == 1:
-                inner_patterns.append("[" + "".join(sorted(terminal_keys)) + "]")
+                inner_patterns.append('[' + ''.join(sorted(terminal_keys)) + ']')
             else:
-                inner_patterns.append("(?:" + "|".join(sorted(terminal_keys)) + ")")
+                inner_patterns.append('(?:' + '|'.join(sorted(terminal_keys)) + ')')
 
         if len(inner_patterns) == 1:
             result = inner_patterns[0]
         elif len(inner_patterns) > 1 and inner_patterns:
             if root_node:
-                result = "|".join(sorted(inner_patterns))
+                result = '|'.join(sorted(inner_patterns))
             else:
-                result = "(?:" + "|".join(sorted(inner_patterns)) + ")"
+                result = '(?:' + '|'.join(sorted(inner_patterns)) + ')'
 
         if node.value is not Empty:
-            result = "?" if empty_inner_patterns else f"(?:{result})?"
+            result = '?' if empty_inner_patterns else f'(?:{result})?'
 
         return result
 
     def __delitem__(self, key: str) -> None:
         if not key or key not in self:
-            raise KeyError("Key not found in trie object")
+            raise KeyError('Key not found in trie object')
 
         keys = [(0, self.data), *self._traverse_nodes(key, only_leafs=False)]
         _, node = keys[-1]
@@ -249,7 +256,7 @@ class Radix(Trie):
             else:
                 break
 
-    def candidate_key(self, node: RadixNode, key: str) -> Tuple[str, int]:
+    def candidate_key(self, node: RadixNode, key: str) -> tuple[str, int]:
         """
         Find most similar keys to given subkey based on node structure.
 

@@ -1,16 +1,14 @@
 """Test config and fixtures used by tests."""
-from typing import Iterable
+from collections.abc import Iterable
 
 import pytest
 
+from tests.test_utils import data_in_test
+from tests.test_utils import default_value
+from tests.test_utils import func_simple_radix
+from tests.test_utils import func_simple_trie
+from tests.test_utils import func_simple_tuple_trie
 from triematch.radix import Radix
-from tests.test_utils import (
-    data_in_test,
-    default_value,
-    func_simple_radix,
-    func_simple_trie,
-    func_simple_tuple_trie,
-)
 from triematch.trie import Trie
 
 
@@ -27,14 +25,14 @@ def simple_trie(request: pytest.FixtureRequest) -> Trie:
 
 
 
-@pytest.fixture(params=[Trie, Radix,])
+@pytest.fixture(params=[Trie, Radix])
 def strtrie_like_class(request: pytest.FixtureRequest) -> Trie:
     """Trie-likes constructor classes that work with string sequeneces (not tuples)."""
     return request.param
 
 
 @pytest.fixture(
-    scope="function",
+    scope='function',
     params=[func_simple_trie, func_simple_tuple_trie, func_simple_radix],
 )
 def mutable_trie(request: pytest.FixtureRequest) -> Trie:
@@ -47,7 +45,7 @@ def mutable_trie(request: pytest.FixtureRequest) -> Trie:
 
 
 @pytest.fixture(
-    scope="function",
+    scope='function',
     params=[func_simple_trie, func_simple_radix],
 )
 def any_trielike(request: pytest.FixtureRequest) -> Trie:

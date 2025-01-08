@@ -43,18 +43,21 @@ print(list(trie.search(search_sequence)))
 """
 from collections import deque
 from collections import UserDict
+from collections.abc import Iterable
 from enum import Enum
 from functools import reduce
-from typing import Any, Iterable, Optional, TypeVar
+from typing import Any
+from typing import Optional
+from typing import TypeVar
 
 from triematch.utils import pairwise
 
 # constant values used in data structure
 Empty = object()
 NotDefined = object()
-TrieKey = TypeVar("TrieKey", str, tuple)
-TrieType = TypeVar("TrieType", bound="BaseTrie")
-BaseNodeType = TypeVar("BaseNode", bound="BaseNode")
+TrieKey = TypeVar('TrieKey', str, tuple)
+TrieType = TypeVar('TrieType', bound='BaseTrie')
+BaseNodeType = TypeVar('BaseNode', bound='BaseNode')
 
 class TrieStates(Enum):
     """Enum for Aho-Corasick Trie states."""
@@ -68,7 +71,7 @@ class BaseNode(dict):
 
     It is a dictlike object used for each nore of trie objets.
     """
-    __slots__ = ("value",)
+    __slots__ = ('value',)
 
     def __init__(self, value: Any=Empty) -> None:  ## Node TODO not exactly a dict
         self.value = value
@@ -126,7 +129,7 @@ class Node(BaseNode):
 
     It is a dict-like object used for each node of trie objects.
     """
-    __slots__ = ("value", "dict_link", "failure_link", "pathlen")
+    __slots__ = ('value', 'dict_link', 'failure_link', 'pathlen')
 
     def __init__(self, value: Any=Empty) -> None:
         """
@@ -252,7 +255,7 @@ class BaseTrie(UserDict):
             None
         """
         if not key or key not in self:
-            raise KeyError("Key not found in trie object")
+            raise KeyError('Key not found in trie object')
 
         keys = [(0, self.data), *self._traverse_nodes(key, only_leafs=False)]
         _, node = keys[-1]
@@ -281,7 +284,7 @@ class BaseTrie(UserDict):
         Returns:
             Default value for the missing key
         """
-        raise KeyError(f"Key {key} is missing in Trie")
+        raise KeyError(f'Key {key} is missing in Trie')
 
     def __getnode_safe__(self, key: TrieKey) -> BaseNode:
         """
@@ -354,7 +357,7 @@ class BaseTrie(UserDict):
 
     def items(
         self,
-        root_path: Optional[TrieKey]="",
+        root_path: Optional[TrieKey]='',
     ) -> Iterable[tuple[TrieKey, Any]]:
         """
         Iterate over all (key, value) pairs in the trie.
@@ -362,7 +365,7 @@ class BaseTrie(UserDict):
         Yields:
             tuple: (key, value) pairs for all items in the trie
         """
-        if root_path == "":
+        if root_path == '':
             root_node = self.data
         else:
             root_node = self.__getnode__(root_path, only_leafs=False)
@@ -499,8 +502,8 @@ class ACMixin:
         None
         """
         self._check_update_possible()
-        super(ACMixin, self).__setitem__(key, value)
-    
+        super().__setitem__(key, value)
+
     def __delitem__(self, key: str) -> None:
         self._check_update_possible()
         return super().__delitem__(key)
@@ -548,7 +551,7 @@ class ACMixin:
 
     def _check_update_possible(self) -> None:
         if self._state == TrieStates.Linked:
-            raise AttributeError("Not possible!")
+            raise AttributeError('Not possible!')
 
     def link_nodes(self) -> None:
         """Generate lookup links between nodes and freeze the tree."""
@@ -637,7 +640,7 @@ class StringTrie(ACMixin, BaseTrie):
             str: Regex pattern to match keys in the trie object.
         """
         if not len(node) or node.value is not Empty:
-            return ""
+            return ''
 
         inner_patterns = []
         terminal_keys = []
@@ -646,30 +649,30 @@ class StringTrie(ACMixin, BaseTrie):
             for key, ch_node in node.items()
         ]
 
-        terminal_keys = [key for key, ch_pattern in childs if ch_pattern == ""]
+        terminal_keys = [key for key, ch_pattern in childs if ch_pattern == '']
 
         inner_patterns = [
-            key + ch_pattern for key, ch_pattern in childs if ch_pattern != ""
+            key + ch_pattern for key, ch_pattern in childs if ch_pattern != ''
         ]
         empty_inner_patterns = len(inner_patterns) == 0
 
         if len(terminal_keys) == 1:
             inner_patterns.append(terminal_keys[0])
         elif len(terminal_keys) > 1:
-            inner_patterns.append("[" + "".join(terminal_keys) + "]")
+            inner_patterns.append('[' + ''.join(terminal_keys) + ']')
 
         if len(inner_patterns) == 1:
             result = inner_patterns[0]
         elif root_node:
-            result = "|".join(sorted(inner_patterns))
+            result = '|'.join(sorted(inner_patterns))
         else:
-            result = "(?:" + "|".join(sorted(inner_patterns)) + ")"
+            result = '(?:' + '|'.join(sorted(inner_patterns)) + ')'
 
         if node.value is not Empty and not root_node:
             if empty_inner_patterns:
-                result += "?"
+                result += '?'
             else:
-                result = "(?:" + result + ")?"
+                result = '(?:' + result + ')?'
 
         return result
 

@@ -2,16 +2,14 @@
 All tests for dict like behavior of BaseTrie
 (Trie, Radix, etc.) class and it's subclasses
 """
-
-from collections.abc import KeysView, ValuesView
+from collections.abc import KeysView
+from collections.abc import ValuesView
 
 import pytest
 
-from tests.test_utils import (
-    data_in_test,
-    default_value,
-    func_simple_trie,
-)
+from tests.test_utils import data_in_test
+from tests.test_utils import default_value
+from tests.test_utils import func_simple_trie
 
 Etc = data_in_test.Etc
 
@@ -24,16 +22,16 @@ def test_data_in_test() -> None:
     ):
         assert (
             long_key in key_list
-        ), f"updated data_in_test module? {long_key=} \
-            has to be included in {key_list=}"
+        ), f'updated data_in_test module? {long_key=} \
+            has to be included in {key_list=}'
         assert (
             missing_key not in key_list
-        ), f"updated data_in_test module? {missing_key=} \
-            has to be not included in {key_list=}"
+        ), f'updated data_in_test module? {missing_key=} \
+            has to be not included in {key_list=}'
         assert (
             len(key_list) > 2
-        ), "updated data_in_test module? some tests \
-            require key_list to have at least 3 keys"
+        ), 'updated data_in_test module? some tests \
+            require key_list to have at least 3 keys'
 
 
 def test_make_trie_empty_contructor(
@@ -43,10 +41,10 @@ def test_make_trie_empty_contructor(
 ) -> None:
     """Create empty object and fill it later."""
     trie = strtrie_like_class()
-    assert not trie, "Empty trie should eb evaluated as False"
+    assert not trie, 'Empty trie should eb evaluated as False'
     for k in simple_trie_keys:
         trie[k] = default_value_func(k)
-    assert trie, "Non-empty trie should eb evaluated as True"
+    assert trie, 'Non-empty trie should eb evaluated as True'
 
 
 def test_make_trie_non_empty_constructor(
@@ -62,7 +60,7 @@ def test_make_trie_non_empty_constructor(
     trie1 = strtrie_like_class(kwargs)
     trie2 = strtrie_like_class(**kwargs)
     trie3 = strtrie_like_class(kwargs, **kwargs)
-    assert trie1, "trie not created?"
+    assert trie1, 'trie not created?'
     assert trie1 == trie2
     assert trie1 == trie3
 
@@ -71,7 +69,7 @@ def test_wrong_key_not_in_trie(simple_trielike, missing_key) -> None:
     """If key is not stored in trie, key in trie has to return False."""
     assert (
         missing_key not in simple_trielike
-    ), f"key {missing_key} was supposed to be not in trie"
+    ), f'key {missing_key} was supposed to be not in trie'
 
 
 def test_longer_key_not_in_trie(simple_trielike, simple_trie_keys) -> None:
@@ -79,10 +77,10 @@ def test_longer_key_not_in_trie(simple_trielike, simple_trie_keys) -> None:
     test_key = simple_trie_keys[-1]
     while test_key in simple_trie_keys:
         # After while loop this key should not be in trie
-        test_key += "o"
+        test_key += 'o'
     assert (
         test_key not in simple_trielike
-    ), f"key {test_key} was supposed to be not in trie"
+    ), f'key {test_key} was supposed to be not in trie'
 
 
 def test_subkey_not_in_trie(simple_trielike, simple_trie_keys) -> None:
@@ -93,11 +91,11 @@ def test_subkey_not_in_trie(simple_trielike, simple_trie_keys) -> None:
         test_key = test_key[-1]
     assert (
         test_key
-    ), "simple_trie_keys has to include some subkeys \
-        not in the list (and corresponding trie)"
+    ), 'simple_trie_keys has to include some subkeys \
+        not in the list (and corresponding trie)'
     assert (
         test_key not in simple_trielike
-    ), f"key {test_key} was supposed to be not in trie"
+    ), f'key {test_key} was supposed to be not in trie'
 
 
 def test_trie_get_value(simple_trielike, simple_trie_keys) -> None:
@@ -106,7 +104,7 @@ def test_trie_get_value(simple_trielike, simple_trie_keys) -> None:
         value = default_value(key)
         assert (
             simple_trielike[key] == value
-        ), f"{value=} was expected as value of key {key=}"
+        ), f'{value=} was expected as value of key {key=}'
 
 
 def test_trie_get_wrong_key(simple_trielike, missing_key) -> None:
@@ -116,7 +114,7 @@ def test_trie_get_wrong_key(simple_trielike, missing_key) -> None:
 
 
 @pytest.mark.parametrize(
-    ("simple_trielike", "new_key"),
+    ('simple_trielike', 'new_key'),
     zip(data_in_test.ALLTypes.key_lists, data_in_test.ALLTypes.new_keys),
     indirect=True,
 )
@@ -127,15 +125,15 @@ def test_update_trie_simple_case(simple_trielike, new_key) -> None:
     """
     assert (
         new_key not in simple_trielike
-    ), "this key was supposed to be missing in trie! (maybe wrong test data?)"
-    simple_trielike.update({new_key: "new_val"})
+    ), 'this key was supposed to be missing in trie! (maybe wrong test data?)'
+    simple_trielike.update({new_key: 'new_val'})
     assert (
         new_key in simple_trielike
-    ), "a new key added to the trie, but it is missing there"
+    ), 'a new key added to the trie, but it is missing there'
 
 
 @pytest.mark.parametrize(
-    ("simple_trielike", "simple_trie_keys"),
+    ('simple_trielike', 'simple_trie_keys'),
     zip(data_in_test.ALLTypes.key_lists, data_in_test.ALLTypes.key_lists),
     indirect=True,
 )
@@ -148,10 +146,10 @@ def test_update_val_in_trie(simple_trielike, simple_trie_keys) -> None:
     key = simple_trie_keys[0]
     assert (
         key in simple_trielike
-    ), f"{key=} from simple_trie_keys not included in simple_trielike object?"
+    ), f'{key=} from simple_trie_keys not included in simple_trielike object?'
 
     current_val = simple_trielike[key]
-    new_val = "new_val"
+    new_val = 'new_val'
     assert current_val != new_val
 
     simple_trielike.update({key: new_val})
@@ -210,7 +208,7 @@ def test_trie_dot_values(simple_trielike, simple_trie_keys) -> None:
 
 
 @pytest.mark.parametrize(
-    "simple_trie_keys",
+    'simple_trie_keys',
     data_in_test.ALLTypes.key_lists,
     indirect=True,
 )
@@ -222,7 +220,7 @@ def test_update_trie_colliding_key(strtrie_like_class, simple_trie_keys) -> None
     trie = strtrie_like_class({key: default_value(key) for key in simple_trie_keys[:2]})
     new_key = simple_trie_keys[0] + simple_trie_keys[1] + simple_trie_keys[2]
     assert new_key not in trie
-    new_val = "new_val"
+    new_val = 'new_val'
     trie.update({new_key: new_val})
     assert new_key in trie
     assert new_val == trie[new_key]
@@ -230,7 +228,7 @@ def test_update_trie_colliding_key(strtrie_like_class, simple_trie_keys) -> None
 
 
 @pytest.mark.parametrize(
-    ("simple_mutable_trielike", "simple_trie_keys"),
+    ('simple_mutable_trielike', 'simple_trie_keys'),
     zip(data_in_test.ALLTypes.key_lists, data_in_test.ALLTypes.key_lists),
     indirect=True,
 )
@@ -243,8 +241,8 @@ def test_delete_key(simple_mutable_trielike, simple_trie_keys) -> None:
 
 
 def test_delete_key_with_resembling_keys(strtrie_like_class, simple_trie_keys) -> None:
-    key_similar = "abababcc"
-    key_to_delete = "aba_abcc"
+    key_similar = 'abababcc'
+    key_to_delete = 'aba_abcc'
     keys = (*simple_trie_keys, key_similar, key_to_delete)
     trie = strtrie_like_class({key: default_value(key) for key in keys})
 
@@ -259,8 +257,8 @@ def test_delete_key_with_resembling_keys_text_count_len(
     strtrie_like_class,
     simple_trie_keys,
 ) -> None:
-    key_similar = "abababcc"
-    key_to_delete = "aba_abcc"
+    key_similar = 'abababcc'
+    key_to_delete = 'aba_abcc'
     keys = (*simple_trie_keys, key_similar, key_to_delete)
     trie = strtrie_like_class({key: default_value(key) for key in keys})
 
@@ -319,7 +317,7 @@ def test_trie_repr(strtrie_like_class, new_key) -> None:
     dct = {new_key: val}
 
     trie = strtrie_like_class()
-    assert str(trie) == "{}"
+    assert str(trie) == '{}'
     trie[new_key] = val
     assert str(trie) == str(dct)
 
@@ -382,8 +380,8 @@ def test_trie_dunder_copy_is_not_copying_values(simple_trielike, long_key) -> No
     but they should not copy the value object
     """
     key = long_key  # some random key
-    other_key = "this_key_is outside_trie"
-    other_val = "ABCD"
+    other_key = 'this_key_is outside_trie'
+    other_val = 'ABCD'
 
     simple_trielike[key] = {}  # try it with a mutable object
 
@@ -400,7 +398,7 @@ def test_trie_dunder_copy_is_not_copying_values(simple_trielike, long_key) -> No
 
 
 @pytest.mark.parametrize(
-    ("simple_trie", "simple_trie_keys"),
+    ('simple_trie', 'simple_trie_keys'),
     [
         (data_in_test.StrData.key_list, data_in_test.StrData.key_list),
     ],
@@ -421,7 +419,7 @@ def test_trie_extend_key(simple_trie, simple_trie_keys) -> None:
 
 
 @pytest.mark.parametrize(
-    ("simple_tuple_trie", "simple_trie_keys"),
+    ('simple_tuple_trie', 'simple_trie_keys'),
     [
         (data_in_test.TupleIntData.key_list, data_in_test.TupleIntData.key_list),
         (data_in_test.TupleStrData.key_list, data_in_test.TupleStrData.key_list),
